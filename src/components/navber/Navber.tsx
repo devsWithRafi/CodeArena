@@ -4,7 +4,7 @@ import ThemeToggle from '../ThemeToggle';
 
 const Navber = () => {
   return (
-    <nav className="flex items-center w-full sticky top-0 border-b border-white/15 p-5">
+    <nav className="z-[99999] flex items-center w-full sticky top-0 border-b border-white/15 p-5">
       <header className="max-w-[1500px] mx-auto w-full flex items-center justify-between">
         {/* nav left */}
         <div className="flex items-center gap-3">

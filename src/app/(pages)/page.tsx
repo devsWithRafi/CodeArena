@@ -113,7 +113,7 @@ const HomePage = () => {
                       ))}
                     </div>
 
-                    <Link href={'/'} className={cn(buttonVariants(), 'rounded-md py-2 h-auto')}>Solve Challange</Link>
+                    <Link href={`/problems/${p.id}`} className={cn(buttonVariants(), 'rounded-md py-2 h-auto')}>Solve Challange</Link>
                   </CardContent>
                 </CardHeader>
               </Card>
