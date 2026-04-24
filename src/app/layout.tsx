@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins, Abel } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import ReduxProvider from '@/context/ReduxProvider';
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -39,7 +40,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <ReduxProvider>{children}</ReduxProvider>
           </ThemeProvider>
         </main>
       </body>
