@@ -24,21 +24,21 @@ const MarkdownText = ({ text }: { text: string }) => {
                 {String(children)}
               </SyntaxHighlighter>
             ) : (
-              <code className="bg-[#424242] text-zinc-300 px-1.5 py-0.5 rounded font-normal text-sm">
+              <code className="bg-[#424242] text-zinc-300 px-[5px] py-[1px] rounded font-normal text-sm">
                 {children}
               </code>
             );
           },
           li: ({ children }) => (
-            <li className="text-sm text-muted-foreground font-space list-disc list-inside mb-1">
+            <li className="text-xs text-muted-foreground font-space list-disc list-inside mb-1">
               {children}
             </li>
           ),
           h2: ({ children }) => (
-            <h2 className="text-lg my-2 font-semibold">{children}</h2>
+            <h2 className="text-[15px] my-2 font-semibold">{children}</h2>
           ),
           h1: ({ children }) => (
-            <h1 className="text-lg my-2 font-bold">{children}</h1>
+            <h1 className="text-[16px] my-2 font-bold">{children}</h1>
           ),
 
           table: ({ children }) => (
@@ -47,19 +47,19 @@ const MarkdownText = ({ text }: { text: string }) => {
             </table>
           ),
           th: ({ children }) => (
-            <th className="border text-md border-white/30 px-3 font-medium py-2 bg-zinc-800">
+            <th className="border text-sm border-white/30 px-3 font-medium py-2 bg-zinc-800">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="border text-sm text-zinc-300 font-normal border-white/20 px-3 py-2">
+            <td className="border text-xs text-zinc-300 font-normal border-white/20 px-3 py-2">
               {children}
             </td>
           ),
 
           hr: () => <hr className="border-white/10 my-4" />,
           p: ({ children }) => (
-            <p className="text-sm text-muted-foreground mb-2">{children}</p>
+            <p className="text-xs text-muted-foreground mb-2">{children}</p>
           ),
         }}
       >

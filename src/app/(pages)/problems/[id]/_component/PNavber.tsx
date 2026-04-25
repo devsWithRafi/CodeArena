@@ -3,50 +3,23 @@
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { languageList } from '@/lib/languageList';
+import useCodeRunner from '@/hooks/useCodeRunner';
 import { RootState } from '@/store/store';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
-const url = 'https://emkc.org/api/v2/piston/execute';
-
 const PNavber = () => {
   const codeContent = useSelector((state: RootState) => state.codeContent);
-  const { language, version } = useSelector(
+  const { id: langId } = useSelector(
     (state: RootState) => state.selectedLanguage,
   );
 
-  const runCode = async () => {
-    const findLang = languageList.find((lang) => lang.name === language);
-    const payload = {
-      language,
-      version,
-      files: [
-        {
-          name: `main.${findLang?.extension}`,
-          content: codeContent,
-        },
-      ],
-      stdin: '',
-      args: ['1', '2', '3'],
-      compile_timeout: 10000,
-      run_timeout: 3000,
-      compile_memory_limit: -1,
-      run_memory_limit: -1,
-    };
+  const { handleRunCode } = useCodeRunner();
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    console.log('data:', data);
-  };
+  const handleExicuteCode = async () => {
+    await handleRunCode(codeContent, langId);
+  }
 
   return (
     <nav className="z-[99999] flex items-center w-full sticky top-0 border-b border-white/15 px-5 h-16">
@@ -65,7 +38,7 @@ const PNavber = () => {
         {/* nav right */}
         <div className="flex items-center gap-2">
           <Button
-            onClick={runCode}
+            onClick={handleExicuteCode}
             variant="outline"
             className="rounded-md font-medium px-3 py-2 h-auto"
           >
@@ -82,3 +55,33 @@ const PNavber = () => {
 };
 
 export default PNavber;
+
+// if error
+// {
+//     "stdout": null,
+//     "time": "1.094",
+//     "memory": 52356,
+//     "stderr": "/box/script.js:1\nconsole.log(Hello world!)\n            ^^^^^\n\nSyntaxError: missing ) after argument list\n    at wrapSafe (node:internal/modules/cjs/loader:1378:20)\n    at Module._compile (node:internal/modules/cjs/loader:1428:41)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)\n    at Module.load (node:internal/modules/cjs/loader:1288:32)\n    at Module._load (node:internal/modules/cjs/loader:1104:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)\n    at node:internal/main/run_main_module:28:49\n\nNode.js v20.17.0\n",
+//     "token": "c7579c1f-a974-408a-8d40-0e9697a2bd1c",
+//     "compile_output": null,
+//     "message": "Exited with error status 1",
+//     "status": {
+//         "id": 11,
+//         "description": "Runtime Error (NZEC)"
+//     }
+// }
+
+// if success
+// {
+//     "stdout": "Hello world!\n",
+//     "time": "1.051",
+//     "memory": 52868,
+//     "stderr": null,
+//     "token": "858ca119-093f-42ba-ac8e-b63f748f4dac",
+//     "compile_output": null,
+//     "message": null,
+//     "status": {
+//         "id": 3,
+//         "description": "Accepted"
+//     }
+// }

@@ -4,17 +4,15 @@ import { Badge } from '@/components/ui/badge';
 import MarkdownText from '@/components/MarkdownText';
 import LanguageSelect from './_component/LanguageSelect';
 import CodeEditor from './_component/CodeEditor';
-import { Button } from '@/components/ui/button';
 import { languageList } from '@/lib/languageList';
 import { Group, Panel } from 'react-resizable-panels';
+import Terminal from './_component/Terminal';
 
 interface languageType {
+  id: number;
   language: string;
   version: string;
-  aliases: string[];
 }
-
-const url = 'https://emkc.org/api/v2/piston/runtimes'
 
 const texts = `
 # Task
@@ -100,31 +98,42 @@ $$ x > 20 $$
 So it is **even** and greater than 20, therefore print **Not Weird**.
 `;
 
-const fetchLanguage = async () => {
+const fetchLanguage = async (): Promise<languageType[]> => {
   try {
-    const res = await fetch(url);
+    const res = await fetch('https://ce.judge0.com/languages');
     const data = await res.json();
-    const filterData = data.filter((lang: languageType) =>
-      languageList.some(item => item.name === lang.language.toLowerCase()),
-    );
 
-    const languages = filterData.filter((lang: languageType) => {
+    const latestVersions: any = {};
+
+    data.forEach((item: any) => {
+      const match = item.name.match(/^([^(]+)\s*\((.+)\)$/);
+      if (!match) return;
+
+      const langRaw = match[1].trim().toLowerCase();
+      let langKey = langRaw.replace(/\s/g, '');
+      if (langKey === 'cpp') langKey = 'c++';
+
+      if (!languageList.includes(langKey)) return;
+
+      const parts = match[2].split(' ');
+      const version = parts[parts.length - 1];
+
       if (
-        lang.language.toLowerCase() === 'javascript' &&
-        parseFloat(lang.version) < 18
-      )
-        return false;
-      if (
-        lang.language.toLowerCase() === 'typescript' &&
-        parseFloat(lang.version) < 5
-      )
-        return false;
-      return true;
+        !latestVersions[langKey] ||
+        version > latestVersions[langKey].version
+      ) {
+        latestVersions[langKey] = {
+          language: langKey,
+          version: version,
+          id: item.id,
+        };
+      }
     });
 
-    return languages;
+    return Object.values(latestVersions);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return [];
   }
 };
 
@@ -137,59 +146,75 @@ const ChallangePage = async () => {
       <section className="w-full h-[calc(100vh-64px)] p-5 flex gap-2 justify-between">
         <Group>
           {/* PAGE LEFT */}
-          <Panel defaultSize="50%" minSize='30%'>
-            <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10">
-              {/* top */}
-              <div className="px-5 h-20 flex flex-col justify-center">
-                <h2 className="w-full flex items-center justify-between gap-5 font-semibold">
-                  Longest Substring Without Repeating Characters
-                  <Badge
-                    variant={'outline'}
-                    className="bg-[#1b0808] border-[#471616] text-[#d84646]"
-                  >
-                    Medium
-                  </Badge>
-                </h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Acceptance: 36.7%, Topics: Hash Table, String, Sliding Window
-                </p>
-              </div>
-              <Separator className="bg-white/10" />
+          <Panel defaultSize="50%" minSize="30%">
+            <div className="w-full h-full flex flex-col gap-2 px-0.5">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10">
+                {/* top */}
+                <div className="px-5 h-15 flex flex-col justify-center">
+                  <h2 className="w-full flex items-center justify-between gap-5 text-sm font-semibold">
+                    Longest Substring Without Repeating Characters
+                    <Badge
+                      variant={'outline'}
+                      className="bg-[#1b0808] border-[#471616] text-[#d84646]"
+                    >
+                      Medium
+                    </Badge>
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    Acceptance: 36.7%, Topics: Hash Table, String, Sliding
+                    Window
+                  </p>
+                </div>
+                <Separator className="bg-white/10" />
 
-              {/* bottom */}
-              <div className="px-5 overflow-y-scroll h-[calc(100%-80px)] pb-20">
-                <MarkdownText text={texts} />
+                {/* bottom */}
+                <div className="px-5 overflow-y-scroll h-[calc(100%-60px)] pb-20">
+                  <MarkdownText text={texts} />
+                </div>
               </div>
             </div>
           </Panel>
 
           {/* PAGE RIGHT */}
           <Panel defaultSize="50%" minSize="30%">
-            <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10">
-              {/* top */}
-              <div className="px-5 h-20 flex justify-between gap-5">
-                <div className="flex items-center justify-between gap-5 font-semibold">
-                  Code Editor
-                  <LanguageSelect languages={languages} />
-                </div>
+            <Group
+              orientation="vertical"
+              className="w-full h-full flex flex-col gap-1 px-0.5"
+            >
+              <Panel defaultSize="70%" minSize="40%">
+                <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10">
+                  {/* top */}
+                  <div className="px-5 h-15 flex justify-between gap-5">
+                    <div className="flex items-center justify-between gap-5 font-semibold">
+                      Code Editor
+                      <LanguageSelect languages={languages} />
+                    </div>
 
-                <div className="text-sm flex items-center gap-3 text-muted-foreground mt-1">
-                  <Badge
-                    variant={'outline'}
-                    className="bg-[#222222] border-[#424141] text-[#adadad]"
-                  >
-                    TypeScript
-                  </Badge>
-                  <Button variant={'outline'}>Formate</Button>
-                </div>
-              </div>
-              <Separator className="bg-white/10" />
+                    <div className="text-sm flex items-center gap-3 text-muted-foreground mt-1">
+                      <Badge
+                        variant={'outline'}
+                        className="bg-[#222222] border-[#424141] text-[#adadad]"
+                      >
+                        TypeScript
+                      </Badge>
+                    </div>
+                  </div>
+                  <Separator className="bg-white/10" />
 
-              {/* code editor */}
-              <div className="h-[calc(100%-80px)]">
-                <CodeEditor />
-              </div>
-            </div>
+                  {/* code editor */}
+                  <div className="h-[calc(100%-60px)]">
+                    <CodeEditor />
+                  </div>
+                </div>
+              </Panel>
+
+              {/* terminal */}
+              <Panel defaultSize="30%">
+                <div className="w-full h-full bg-card z-100 rounded-2xl overflow-y-auto border border-white/10">
+                  <Terminal />
+                </div>
+              </Panel>
+            </Group>
           </Panel>
         </Group>
       </section>

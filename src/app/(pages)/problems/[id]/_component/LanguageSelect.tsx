@@ -18,15 +18,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 interface iProps {
   languages: {
+    id: number;
     language: string;
     version: string;
-    aliases: string[];
   }[];
 }
 
 const LanguageSelect = ({ languages }: iProps) => {
   const dispatch = useDispatch();
-  const language: languageType = useSelector(
+  const { language }: languageType = useSelector(
     (state: RootState) => state.selectedLanguage,
   );
 
@@ -39,8 +39,10 @@ const LanguageSelect = ({ languages }: iProps) => {
   }, []);
 
   const handleChange = (value: string) => {
-    const version = languages.find((lang) => lang.language === value)?.version;
-    const payload = { language: value, version: version! };
+    const { language, version, id } = languages.find(
+      (lang) => lang.language === value,
+    )!;
+    const payload = { language, version, id };
     dispatch(setSelectedLanguage(payload));
     localStorage.setItem('language', JSON.stringify(payload));
   };
@@ -48,7 +50,7 @@ const LanguageSelect = ({ languages }: iProps) => {
   return (
     <Select onValueChange={handleChange}>
       <SelectTrigger className="rounded-md font-normal text-sm capitalize">
-        <SelectValue placeholder={language.language || 'javascript'} />
+        <SelectValue placeholder={language || 'javascript'} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

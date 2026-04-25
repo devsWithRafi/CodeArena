@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 export interface languageType {
+  id: number;
   language: string;
   version: string;
 }
@@ -9,6 +9,7 @@ export interface languageType {
 const selectedLanguageSlice = createSlice({
   name: 'selectedLanguage',
   initialState: {
+    id: 0,
     language: '',
     version: '',
   },

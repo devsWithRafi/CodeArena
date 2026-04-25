@@ -41,14 +41,16 @@ const CodeEditor = () => {
   // };
 
   return (
-    <Editor
-      height="100%"
-      language={language || 'javascript'}
-      value={defaultCodeSnippets[language || 'javascript']}
-      onMount={handleEditorDidMount}
-      theme="vs-dark"
-      onChange={(value) => dispatch(setCodeContent(value || ''))}
-    />
+    <div className='h-full'>
+      <Editor
+        height="100%"
+        language={language || 'javascript'}
+        value={defaultCodeSnippets[language || 'javascript']}
+        onMount={handleEditorDidMount}
+        theme="vs-dark"
+        onChange={(value) => dispatch(setCodeContent(value || ''))}
+      />
+    </div>
   );
 };
 
