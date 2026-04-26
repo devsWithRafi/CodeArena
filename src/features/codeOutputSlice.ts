@@ -6,6 +6,7 @@ export interface codeOutputType {
   message: string | null;
   status: string | null;
   token?: string;
+  loading?: boolean;
 }
 
 const initialState: codeOutputType = {
@@ -14,6 +15,7 @@ const initialState: codeOutputType = {
   message: '',
   status: '',
   token: '',
+  loading: false,
 };
 
 const codeOutputSlice = createSlice({

@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Add Two Numbers",
+    "language": "javascript",
+    "functionName": "addToSum",
+    "description": "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
+    "difficulty": "Easy",
+    "tags": ["Array", "Hash Table"],
+    "starterCode": "\nfunction addToSum(a, b) {\n  // write your code here\n}\n",
+    "testCases": [
+      { "id": 1, "input": [2, 3], "output": 5 },
+      { "id": 2, "input": [10, 20], "output": 31 }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Add Two Numbers",
+    "language": "javascript",
+    "functionName": "addToSum",
+    "description": "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
+    "difficulty": "Easy",
+    "tags": ["Array", "Hash Table"],
+    "starterCode": "\nfunction addToSum(a, b) {\n  // write your code here\n}\n",
+    "testCases": [
+      { "id": 1, "input": [2, 3], "output": 5 },
+      { "id": 2, "input": [10, 20], "output": 30 }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Add Two Numbers",
+    "language": "javascript",
+    "functionName": "addToSum",
+    "description": "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
+    "difficulty": "Easy",
+    "tags": ["Array", "Hash Table"],
+    "starterCode": "\nfunction addToSum(a, b) {\n  // write your code here\n}\n",
+    "testCases": [
+      { "id": 1, "input": [2, 3], "output": 5 },
+      { "id": 2, "input": [10, 20], "output": 30 }
+    ]
+  }
+]

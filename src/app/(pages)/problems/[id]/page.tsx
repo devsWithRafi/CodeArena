@@ -4,15 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import MarkdownText from '@/components/MarkdownText';
 import LanguageSelect from './_component/LanguageSelect';
 import CodeEditor from './_component/CodeEditor';
-import { languageList } from '@/lib/languageList';
 import { Group, Panel } from 'react-resizable-panels';
-import Terminal from './_component/Terminal';
+import Terminal from './_component/terminal/Terminal';
+import { fetchLanguage } from '@/lib/api';
 
-interface languageType {
-  id: number;
-  language: string;
-  version: string;
-}
 
 const texts = `
 # Task
@@ -98,47 +93,9 @@ $$ x > 20 $$
 So it is **even** and greater than 20, therefore print **Not Weird**.
 `;
 
-const fetchLanguage = async (): Promise<languageType[]> => {
-  try {
-    const res = await fetch('https://ce.judge0.com/languages');
-    const data = await res.json();
-
-    const latestVersions: any = {};
-
-    data.forEach((item: any) => {
-      const match = item.name.match(/^([^(]+)\s*\((.+)\)$/);
-      if (!match) return;
-
-      const langRaw = match[1].trim().toLowerCase();
-      let langKey = langRaw.replace(/\s/g, '');
-      if (langKey === 'cpp') langKey = 'c++';
-
-      if (!languageList.includes(langKey)) return;
-
-      const parts = match[2].split(' ');
-      const version = parts[parts.length - 1];
-
-      if (
-        !latestVersions[langKey] ||
-        version > latestVersions[langKey].version
-      ) {
-        latestVersions[langKey] = {
-          language: langKey,
-          version: version,
-          id: item.id,
-        };
-      }
-    });
-
-    return Object.values(latestVersions);
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
-
-const ChallangePage = async () => {
+const ChallangePage = async ({params}:{params: Promise<{id: string}>}) => {
   const languages = await fetchLanguage();
+  const { id:prbId } = await params;
 
   return (
     <>
@@ -203,14 +160,14 @@ const ChallangePage = async () => {
 
                   {/* code editor */}
                   <div className="h-[calc(100%-60px)]">
-                    <CodeEditor />
+                    <CodeEditor problemId={prbId}/>
                   </div>
                 </div>
               </Panel>
 
               {/* terminal */}
               <Panel defaultSize="30%">
-                <div className="w-full h-full bg-card z-100 rounded-2xl overflow-y-auto border border-white/10">
+                <div className="w-full h-full z-100 rounded-2xl overflow-y-auto border bg-[#0d1117] border-white/10">
                   <Terminal />
                 </div>
               </Panel>

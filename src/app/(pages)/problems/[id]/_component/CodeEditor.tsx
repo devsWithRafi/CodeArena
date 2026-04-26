@@ -8,8 +8,9 @@ import { RootState } from '@/store/store';
 import { defaultCodeSnippets } from '@/lib/languageList';
 import { setCodeContent } from '@/features/codeSlice';
 import { languageType } from '@/features/selectedLanguageSlice';
+import problems from '@/lib/problems.json';
 
-const CodeEditor = () => {
+const CodeEditor = ({ problemId }: { problemId: string }) => {
   const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(
     null,
   );
@@ -18,6 +19,8 @@ const CodeEditor = () => {
     (state: RootState) => state.selectedLanguage,
   );
   const dispatch = useDispatch();
+
+  const problem = problems.find((p) => String(p.id) === String(problemId));
 
   const handleEditorDidMount = (
     editor: monacoEditor.editor.IStandaloneCodeEditor,
@@ -28,24 +31,20 @@ const CodeEditor = () => {
   };
 
   useEffect(() => {
-    const newCode = defaultCodeSnippets[language || 'javascript'];
+    // const newCode = defaultCodeSnippets[language || 'javascript'];
+    const newCode = problem?.starterCode || '';
     if (editorRef.current) editorRef.current.setValue(newCode);
 
     dispatch(setCodeContent(newCode));
   }, [language]);
 
-  // const showValue = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getValue());
-  //   }
-  // };
-
   return (
-    <div className='h-full'>
+    <div className="h-full">
       <Editor
         height="100%"
         language={language || 'javascript'}
-        value={defaultCodeSnippets[language || 'javascript']}
+        // value={defaultCodeSnippets[language || 'javascript']}
+        value={problem?.starterCode || ''}
         onMount={handleEditorDidMount}
         theme="vs-dark"
         onChange={(value) => dispatch(setCodeContent(value || ''))}

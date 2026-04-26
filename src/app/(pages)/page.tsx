@@ -8,43 +8,44 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import problems from '@/lib/problems.json';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-const problems = [
-  {
-    id: 1,
-    title: 'Two Sum',
-    description:
-      'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-  },
-  {
-    id: 2,
-    title: 'Two Sum',
-    description:
-      'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-  },
-  {
-    id: 3,
-    title: 'Two Sum',
-    description:
-      'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-  },
-  {
-    id: 4,
-    title: 'Two Sum',
-    description:
-      'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-  },
-];
+// const problems = [
+//   {
+//     id: 1,
+//     title: 'Two Sum',
+//     description:
+//       'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
+//     difficulty: 'Easy',
+//     tags: ['Array', 'Hash Table'],
+//   },
+//   {
+//     id: 2,
+//     title: 'Two Sum',
+//     description:
+//       'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
+//     difficulty: 'Easy',
+//     tags: ['Array', 'Hash Table'],
+//   },
+//   {
+//     id: 3,
+//     title: 'Two Sum',
+//     description:
+//       'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
+//     difficulty: 'Easy',
+//     tags: ['Array', 'Hash Table'],
+//   },
+//   {
+//     id: 4,
+//     title: 'Two Sum',
+//     description:
+//       'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
+//     difficulty: 'Easy',
+//     tags: ['Array', 'Hash Table'],
+//   },
+// ];
 
 const HomePage = () => {
   return (
@@ -101,7 +102,7 @@ const HomePage = () => {
                     {p.description}
                   </CardDescription>
                   <CardContent className="w-full flex flex-col gap-5 p-0 mt-5">
-                    <div className='flex items-center gap-2'>
+                    <div className="flex items-center gap-2">
                       {p.tags.map((tag, index) => (
                         <Badge
                           key={index}
@@ -113,7 +114,12 @@ const HomePage = () => {
                       ))}
                     </div>
 
-                    <Link href={`/problems/${p.id}`} className={cn(buttonVariants(), 'rounded-md py-2 h-auto')}>Solve Challange</Link>
+                    <Link
+                      href={`/problems/${p.id}`}
+                      className={cn(buttonVariants(), 'rounded-md py-2 h-auto')}
+                    >
+                      Solve Challange
+                    </Link>
                   </CardContent>
                 </CardHeader>
               </Card>
